@@ -16,8 +16,12 @@ fn main() {
         k
     };
 
+    let veca = vec![1,5,7,10];
+    let vecb = vec![2,3,9];
+
     println!("{:?} {:?}", lena, lenb);
     println!("{:?} {:?}", veca, vecb);
+    println!("{}", find_median_sorted_arrays(veca, vecb));
 }
 
 pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
@@ -25,62 +29,49 @@ pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
     let conlen = nums1.len() + nums2.len();
 
     if (conlen & 0b1) != 0 {
-        let mut med1pos = nums1.len() / 2;
-        let mut bottom1pos = 0;
-        let mut top1pos = nums1.len() - 1;
+        let mut b1 = binary_search_info::new(0,nums1.len()-1).unwrap();
+        let mut b2 = binary_search_info::new(0,nums2.len()-1).unwrap();
 
-        let mut med2pos = nums2.len() / 2;
-        let mut bottom2pos = 0;
-        let mut top2pos = nums2.len() - 1;
+        loop {
+            let n1 = *nums1.get(b1.median_pos).unwrap_or(&0);
+            let n2 = *nums2.get(b2.median_pos).unwrap_or(&0);
 
-
-        while (true) {
-            let n1 = *nums1.get(med1pos).unwrap_or(&0);
-            let n2 = *nums2.get(med2pos).unwrap_or(&0);
-            if med1pos + med2pos > nums1.len() {
-                if(n1 > n2){
-                    top1pos = med1pos;
-                    med1pos = (med1pos + bottom1pos) / 2;
-                }else if (n1 < n2){
-                    top2pos = med2pos;
-                    med2pos = (med2pos + bottom2pos) / 2;
-                }else{
-                    return n1 as f64;
-                }
-            }else{
-                if n1 < n2 {
-                    bottom1pos = med1pos;
-                    med1pos = (med1pos + top1pos) / 2;
-                } else if n1 > n2 {
-                    bottom2pos = med2pos;
-                    med2pos = (med2pos + top2pos) / 2;
-                } else {
-                    n1
-                }
-            }
             
+            steps += 1;
+            println!("{:?} {:?}",b1, b2);
         }
+
     }
 
-    todo!()
+    0.0
 }
-
-
-
+#[derive(Debug)]
 struct binary_search_info {
-    median_pos:usize,
-    bottom_pos:usize,
-    top_pos:usize
+    bottom_pos: usize,
+    median_pos: usize,
+    top_pos: usize,
 }
 
 impl binary_search_info {
-    fn new (bottom:usize, top:usize) -> Result<binary_search_info,String>{
+    fn new(bottom: usize, top: usize) -> Result<binary_search_info, &'static str> {
         if top < bottom {
-            return Err(String::from("Top cannot be smaller than bottom"));
+            return Err("Top cannot be lower than Bottom");
         }
-        
-
-        todo!()
+        let median = (bottom + top) / 2;
+        Ok(binary_search_info {
+            bottom_pos: bottom,
+            median_pos: median,
+            top_pos: top,
+        })
     }
 
+    fn upper_half(&mut self) {
+        self.bottom_pos = self.median_pos;
+        self.median_pos = (self.median_pos + self.top_pos + 1) / 2;
+    }
+
+    fn lower_half(&mut self) {
+        self.top_pos = self.median_pos;
+        self.median_pos = (self.bottom_pos + self.median_pos) / 2;
+    }
 }
