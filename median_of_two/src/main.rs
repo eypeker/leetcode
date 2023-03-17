@@ -21,27 +21,49 @@ fn main() {
 
     println!("{:?} {:?}", lena, lenb);
     println!("{:?} {:?}", veca, vecb);
-    println!("{}", find_median_sorted_arrays(veca, vecb));
+    //println!("{}", find_median_sorted_arrays(veca, vecb));
 }
 
+enum direction {
+    not_chosen,
+    left_to_right,
+    right_to_left,
+}
+
+
 pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
-    let mut steps: u32 = 0;
     let conlen = nums1.len() + nums2.len();
-
-    if (conlen & 0b1) != 0 {
-        let mut b1 = binary_search_info::new(0,nums1.len()-1).unwrap();
-        let mut b2 = binary_search_info::new(0,nums2.len()-1).unwrap();
-
-        loop {
-            let n1 = *nums1.get(b1.median_pos).unwrap_or(&0);
-            let n2 = *nums2.get(b2.median_pos).unwrap_or(&0);
-
-            
-            steps += 1;
-            println!("{:?} {:?}",b1, b2);
-        }
-
+    let medianindex = (conlen-1) / 2;
+    let mut indexleft = 0; 
+    let mut indexright = 0;
+    let mut dir = direction::not_chosen;
+    if nums1.len() < medianindex / 2  {
+        indexleft = nums1.len() -1;
+        indexright = medianindex -indexleft; 
+    }else if nums2.len() < medianindex /2 {
+        indexright = nums2.len();
+        indexleft = medianindex - indexright;
+    }else {
+        indexleft = conlen / 2;
+        indexright = conlen - indexleft;
     }
+
+    match (nums1.get(indexleft), nums2.get(indexright)) {
+        (Some(a), Some(b)) if *a < *b => dir = direction::right_to_left,
+        (Some(a), Some(b)) if *a > *b => dir = direction::left_to_right,
+        (Some(a), Some(b)) if *a == *b => return *a as f64,
+        (Some(a),None) => return *a as f64,
+        (None, Some(b)) => return *b as f64,
+        _ => (),
+    }
+
+    match dir {
+        direction::left_to_right => (),
+        direction::right_to_left =>(),
+        direction::not_chosen =>(),
+    }
+
+
 
     0.0
 }
