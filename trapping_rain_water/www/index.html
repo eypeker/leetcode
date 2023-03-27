@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trapping Rain Water</title>
+    <script>
+        console.log("This script gets run");
+        const importObject = {
+            Math: {
+                random: () => Math.random(),
+            }
+        };
+        //or 
+        //const importObject = {Math}
+        
+        async function fetchAndInstantiate() {
+            const response = await fetch("trapping_rain_water.wasm");
+            const buffer = await response.arrayBuffer();
+            const obj = await WebAssembly.instantiate(buffer, importObject);
+            console.log(obj.instance.exports.add(1.4,2));
+            
+        }
+        
+        fetchAndInstantiate();
+        console.log("This script also finishes");
+    </script>
+</head>
+<body>
+
+
+</body>
+
+</html>
