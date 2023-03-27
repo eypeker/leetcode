@@ -1,6 +1,6 @@
-use wasm_bindgen::prelude::*;
+//use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+/*#[wasm_bindgen]
 extern {
     pub fn alert(s:&str);
 }
@@ -8,6 +8,10 @@ extern {
 #[wasm_bindgen]
 pub fn greet(name: &str){
     alert(&format!("Helloe, {}!", name));
+}*/
+
+pub fn add(left:usize, right:usize) -> usize {
+    left + right
 }
 
 
