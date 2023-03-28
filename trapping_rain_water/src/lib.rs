@@ -15,7 +15,7 @@ mod math {
     mod math_js {
         #[link(wasm_import_module = "Math")]
         extern "C"{
-            fn random() -> f64;
+            pub fn random() -> f64;
         }
     }
 
