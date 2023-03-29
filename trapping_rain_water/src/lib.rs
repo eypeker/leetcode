@@ -1,6 +1,8 @@
-//use wasm_bindgen::prelude::*;
+use wasm_bindgen::prelude::*;
 
-/*#[wasm_bindgen]
+#[no_std]
+/*
+#[wasm_bindgen]
 extern {
     pub fn alert(s:&str);
 }
@@ -8,10 +10,16 @@ extern {
 #[wasm_bindgen]
 pub fn greet(name: &str){
     alert(&format!("Helloe, {}!", name));
-}*/
+}
+
+*/
+
+pub fn add( left: i32, right: i32) ->i32{
+    left+right
+}
 
 
-mod math {
+/*mod math {
     mod math_js {
         #[link(wasm_import_module = "Math")]
         extern "C"{
@@ -23,17 +31,18 @@ mod math {
         unsafe {math_js::random()}
     }
 }
-
+*/
 
 //#[export_name = "wasm_add_two_numbers"]
-/*#[no_mangle]
-pub fn add(left:f64, right:f64) -> f64 {
+//#[no_mangle]
+/*pub fn add(left:f64, right:f64) -> f64 {
     left + right + unsafe {random()}
 }*/
 
-
+/*
 #[export_name = "add"]
 pub extern "C" fn add( left:f64, right: f64) -> f64 {
     left + right + math::random()
 }
 
+*/
