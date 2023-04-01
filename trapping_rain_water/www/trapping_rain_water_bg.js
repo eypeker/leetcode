@@ -1,16 +1,33 @@
+let wasm;
+export function __wbg_set_wasm(val) {
+    wasm = val;
+}
+
+
+let cachedUint32Memory0 = null;
+
+function getUint32Memory0() {
+    if (cachedUint32Memory0 === null || cachedUint32Memory0.byteLength === 0) {
+        cachedUint32Memory0 = new Uint32Array(wasm.memory.buffer);
+    }
+    return cachedUint32Memory0;
+}
+
+let WASM_VECTOR_LEN = 0;
 
 function passArray32ToWasm0(arg, malloc) {
     const ptr = malloc(arg.length * 4);
-    (new Uint32Array(wasm.memory.buffer)).set(arg, ptr / 4);
-    const WASM_VECTOR_LEN = arg.length;
-    return {ptr, WASM_VECTOR_LEN};
+    getUint32Memory0().set(arg, ptr / 4);
+    WASM_VECTOR_LEN = arg.length;
+    return ptr;
 }
 /**
 * @param {Uint32Array} elevation
 * @returns {number}
 */
-function trap(wasm, elevation) {
-    const {ptr0, len0} = passArray32ToWasm0(elevation, wasm.__wbindgen_malloc);
+export function trap(elevation) {
+    const ptr0 = passArray32ToWasm0(elevation, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
     const ret = wasm.trap(ptr0, len0);
     return ret >>> 0;
 }
