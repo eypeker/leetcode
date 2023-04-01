@@ -2,7 +2,7 @@ use wasm_bindgen::prelude::*;
 
 
 
-#[wasm_bindgen]
+/*#[wasm_bindgen]
 extern {
     pub fn alert(s:&str);
 }
@@ -10,15 +10,45 @@ extern {
 #[wasm_bindgen]
 pub fn greet(name: &str){
     alert(&format!("Helloe, {}!", name));
-}
+}*/
 
 
 //#[no_std]
-#[wasm_bindgen]
+/*#[wasm_bindgen]
 pub fn add( left: i32, right: i32) ->i32{
     left+right
 }
+*/
 
+#[wasm_bindgen]
+pub fn trap(elevation: Vec<u32>) -> u32{
+    let mut highest: u32 = 0;
+    let mut waterlevel: Vec<u32> = vec![0; elevation.len()];
+    for i in 0..elevation.len() {
+        let f = match elevation[i] {
+            k if k < highest => highest - k,
+            k if k >= highest => {highest = k; 0},
+            _ => 0
+        };
+        waterlevel[i] = f;
+    }
+    highest = 0;
+    for i in (0..elevation.len()).rev() {
+        let f = match elevation[i] {
+            k if k < highest => highest - k,
+            k if k >= highest => {highest = k; 0},
+            _ => 0
+        };
+        waterlevel[i] = match waterlevel[i] {
+            k if k < f => k,
+            k if k >= f => f,
+            _ => 0
+        }
+    }
+    let h = waterlevel.into_iter().sum();
+    h
+    
+}
 
 /*mod math {
     mod math_js {
@@ -47,3 +77,35 @@ pub extern "C" fn add( left:f64, right: f64) -> f64 {
 }
 
 */
+
+
+
+
+#[test]
+pub fn onlinebeispiel(){
+    let feld = vec![0,1,0,2,1,0,1,3,2,1,2,1];
+    let erg = trap(feld);
+    assert_eq!(erg,6);
+}
+
+
+#[test]
+pub fn mitlinkerand(){
+    let feld = vec![2,1,0,2,1,0,1,3,2,1,2,1];
+    let erg = trap(feld);
+    assert_eq!(erg,8);
+}
+
+#[test]
+pub fn mitrechterand(){
+    let feld = vec![0,1,0,2,1,0,1,3,2,1,2,3];
+    let erg = trap(feld);
+    assert_eq!(erg,9);
+}
+
+#[test]
+pub fn mitlinkerechterand(){
+    let feld = vec![2,1,0,2,1,0,1,3,2,1,2,3];
+    let erg = trap(feld);
+    assert_eq!(erg,11);
+}

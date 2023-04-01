@@ -5,6 +5,7 @@ timeout 1
 :: copy ".\target\wasm32-unknown-unknown\release\trapping_rain_water.wasm" ".\www\trapping_rain_water.wasm"
 :: copy ".\target\wasm32-unknown-unknown\release\trapping_rain_water.wasm" "\\wsl$\Ubuntu\home\blueinvader\trapping_rain_water.wasm"
 copy ".\pkg\trapping_rain_water_bg.wasm" ".\www\trapping_rain_water.wasm"
+copy ".\pkg\trapping_rain_water_bg.js" ".\www\trapping_rain_water_bg.js""
 
 timeout 1
 
