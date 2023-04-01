@@ -16,10 +16,13 @@
             const response = await fetch("./trapping_rain_water.wasm").then( response => {
                 response.arrayBuffer().then(buffer => {
                     WebAssembly.instantiate(buffer).then(wasm => {
-                        //console.log(wasm.instance.exports.trap)
-                        
+                        console.log(wasm.instance.exports.trap)
+                        const elevation = [2,1,0,2,1,0,1,3,2,1,2,3];
                         const trap = wasm.instance.exports.trap;
-                        const res = trap(wasm, [0,1,0,2,1,0,1,3,2,1,2,1]);
+                        let ptr = wasm.instance.exports.__wbindgen_malloc(elevation.length * 4);
+                        const buffer = new Uint32Array(wasm.instance.exports.memory.buffer);
+                        buffer.set(elevation, ptr/4);
+                        const res = trap(ptr, elevation.length);
                         console.log(res);
                     })
                 })
