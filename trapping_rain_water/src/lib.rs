@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::*;
 
-#[no_std]
-/*
+
+
 #[wasm_bindgen]
 extern {
     pub fn alert(s:&str);
@@ -12,8 +12,9 @@ pub fn greet(name: &str){
     alert(&format!("Helloe, {}!", name));
 }
 
-*/
 
+//#[no_std]
+#[wasm_bindgen]
 pub fn add( left: i32, right: i32) ->i32{
     left+right
 }
