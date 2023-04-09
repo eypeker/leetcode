@@ -20,8 +20,14 @@ pub fn add( left: i32, right: i32) ->i32{
 }
 */
 
-#[wasm_bindgen]
+
 pub fn trap(elevation: Vec<u32>) -> u32{
+    sum_list(water_levels(elevation))
+}
+
+
+#[wasm_bindgen]
+pub fn water_levels(elevation: Vec<u32>) -> Vec<u32>{
     let mut highest: u32 = 0;
     let mut waterlevel: Vec<u32> = vec![0; elevation.len()];
     for i in 0..elevation.len() {
@@ -45,9 +51,12 @@ pub fn trap(elevation: Vec<u32>) -> u32{
             _ => 0
         }
     }
-    let h = waterlevel.into_iter().sum();
-    h
-    
+    waterlevel
+}
+
+#[wasm_bindgen]
+pub fn sum_list(list: Vec<u32>) -> u32{
+    list.into_iter().sum()
 }
 
 /*mod math {
