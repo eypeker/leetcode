@@ -13,9 +13,10 @@ body {
     padding: 0px;
 }
 
-div #field {
+div #grid {
     width:100%;
     height:100%;
     margin:0px;
     padding: 0px;
+    background-color: #afaFff;
 }
