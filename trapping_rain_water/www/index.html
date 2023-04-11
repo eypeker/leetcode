@@ -7,31 +7,70 @@
 
         <script type="module">
             import trapping_rain_water,{water_levels, sum_list} from "./trapping_rain_water.js";
-            const preferredblocksize=50;
+            const preferredblocksize=100;
 
             function get_rows_cols(){
-                return {columns: window.innerWidth / preferredblocksize,
-                         rows: window.innerHeight / preferredblocksize}
+                var columns = Math.floor(window.innerWidth / preferredblocksize);
+                var actualsize = window.innerWidth / columns;
+                var rows = Math.floor(window.innerHeight / actualsize);
+                return {columns: columns,
+                         rows: rows,
+                        stonesize: actualsize
+                    };
             }
 
             function gen_elevation(columns, rows){
                 return Array.from({length:columns}, () => Math.floor(Math.random() * rows));
             }
 
+            function addgrid(columns, rows, blocksize, elevation, waterlevels){
+                var r = document.querySelector(':root');
+                var rs = getComputedStyle(r);
+                r.style.setProperty('--blocksize', blocksize + "px");
+                console.log(rs.getPropertyValue('--blocksize'));
+                var grid = document.querySelector("#grid");
+                grid.innerHTML = "";
+                for( var i = 0; i < columns; i++){
+                    var col = document.createElement('div');
+                    col.className = 'column';
+                    for (var j = 0; j < rows - elevation[i] - waterlevels[i]; j++){
+                        console.log(rows - elevation[i] - waterlevels[i]);
+                        var block = document.createElement('div');
+                        block.className = 'block';
+                        col.appendChild(block);
+                    }
+                    for (var j=0; j< waterlevels[i]; j++){
+                        var block = document.createElement('div');
+                        block.classList.add('block');
+                        block.classList.add('water');
+                        col.appendChild(block);
+                    }
+                    for (var j=0; j< elevation[i]; j++){
+                        var block = document.createElement('div');
+                        block.classList.add('block');
+                        block.classList.add('dirt');
+                        col.appendChild(block);
+                    }
+                    grid.appendChild(col);
+                }
+            }
+            window.onresize = run_application();
             run_application();
 
             async function run_application() {
                 let wasm = await trapping_rain_water();;
-                const {columns, rows} = get_rows_cols();
+                const {columns, rows, stonesize} = get_rows_cols();
                 const elevation = gen_elevation(columns,rows);
-                const arr = Uint32Array.from(elevation);
-                const res = water_levels(arr);
+                const res = water_levels(Uint32Array.from(elevation));
+                const sum = sum_list(res);
+                
                 console.log("Main: " + elevation);
                 console.log("Result: " + res);
-
-
-                const sum = sum_list(res);
+                addgrid(columns, rows, stonesize, elevation, res);
             }
+
+
+
         </script>
     </head>
 
